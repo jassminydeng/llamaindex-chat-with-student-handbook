@@ -33,8 +33,7 @@ class Copilot:
                         )
         
         self.system_prompt = """
-            You are an expert on Columbia University and your job is to answer questions 
-            about the university.
+            You are an expert on marketing research and your expertise is to use LLM to generate creative markeing research idea.
         """
 
     def ask(self, question, messages, openai_key=None):
@@ -52,8 +51,8 @@ class Copilot:
 
             The retrived information is: {retrieved_info}
 
-            Please answer the question based on the retrieved information. If the question is not related to Columbia University, 
-            please tell the user and ask for a question related to Columbia University.
+            Please answer the question based on the retrieved information. If the question is not related to LLM creativity, 
+            please tell the user and ask for a question related to LLM creativity.
 
             Please highlight the information with bold text and bullet points.
         """
