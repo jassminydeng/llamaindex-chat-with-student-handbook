@@ -42,24 +42,36 @@ else:
                 prompt, messages=st.session_state.messages[:-1], openai_key=openai_api_key
             )
 
-            # Display retrieved sources
+            # Display retrieved sources in an expandable section
             if retrieved_info:
-                st.write("### Sources")
-                for source in retrieved_info:
-                    st.write(f"- {source}")
+                with st.expander("📚 Sources", expanded=True):
+                    # Split the retrieved info into individual sources
+                    sources = retrieved_info.split("\n\n")
+                    for source in sources:
+                        if source.strip():
+                            # Extract source name and content
+                            parts = source.split("\n", 1)
+                            if len(parts) == 2:
+                                source_header, content = parts
+                                st.markdown(f"**{source_header}**")
+                                st.markdown(content.strip())
 
             # Display the answer (can be a generator or a string)
             if isinstance(answer, str):
                 st.write(answer)
             else:
                 # Stream the answer to UI
-                def generate():
-                    for chunk in answer:
+                placeholder = st.empty()
+                full_response = ""
+                
+                for chunk in answer:
+                    if hasattr(chunk.choices[0].delta, 'content'):
                         content = chunk.choices[0].delta.content
                         if content:
-                            yield content
-
-                answer = st.write_stream(generate())
+                            full_response += content
+                            placeholder.markdown(full_response)
+                
+                answer = full_response
 
             st.session_state.messages.append({"role": "assistant", "content": answer})
 

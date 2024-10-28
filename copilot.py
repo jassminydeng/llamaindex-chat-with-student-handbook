@@ -40,12 +40,12 @@ class Copilot:
     def format_retrieved_info(self, nodes):
         """Format retrieved information with proper wrapping and spacing"""
         formatted_entries = []
-        wrapper = textwrap.TextWrapper(width=80, initial_indent='    ', subsequent_indent='    ')
         
         for i, node in enumerate(nodes, 1):
             source = node.metadata.get('file_name', 'Unknown source')
-            wrapped_text = wrapper.fill(node.text)
-            entry = f"[{i}] Source: {source}\n{wrapped_text}"
+            # Clean and format the text
+            text = node.text.strip().replace('\n', ' ')
+            entry = f"Source {i}: {source}\n{text}"
             formatted_entries.append(entry)
         
         return "\n\n".join(formatted_entries)
